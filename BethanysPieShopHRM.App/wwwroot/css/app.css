@@ -229,3 +229,8 @@ nav {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.sun_titlt {
+    text-align: center;
+    color: red;
+}
