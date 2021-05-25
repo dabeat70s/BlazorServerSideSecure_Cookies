@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BethanysPieShopHRM.App.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -31,7 +32,8 @@ namespace BethanysPieShopHRM.Server
 
             services.AddHttpClient<IEmployeeDataService, EmployeeDataService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:44340/");
+                //client.BaseAddress = new Uri("https://localhost:44340/");
+                client.BaseAddress = new Uri("https://localhost:44301/");
             });
             services.AddHttpClient<ICountryDataService, CountryDataService>(client =>
             {
@@ -41,6 +43,11 @@ namespace BethanysPieShopHRM.Server
             {
                 client.BaseAddress = new Uri("https://localhost:44340/");
             });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
+            services.AddScoped<TokenProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,8 +69,13 @@ namespace BethanysPieShopHRM.Server
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

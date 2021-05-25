@@ -6,6 +6,8 @@
     Layout = null;
 }
 
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,8 +26,19 @@
     <link href="_content/BethanysPieShopHRM.ComponentsLibrary/leaflet/leaflet.css" rel="stylesheet" />
 </head>
 <body>
+
+
+    @{
+        var initialTokenState = new BethanysPieShopHRM.App.Services.InitailApplicationState
+        {
+            XsrfToken = Xsrf.GetAndStoreTokens(HttpContext).RequestToken,
+            Cookie = HttpContext.Request.Cookies[".AspNetCore.Cookies"]
+        };
+
+    }
     <app>
-        <component type="typeof(App)" render-mode="ServerPrerendered" />
+        <component type="typeof(App)" render-mode="ServerPrerendered"
+                   param-InitialState="initialTokenState"/>
     </app>
 
     <div id="blazor-error-ui">
