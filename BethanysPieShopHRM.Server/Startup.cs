@@ -44,7 +44,7 @@ namespace BethanysPieShopHRM.Server
                 client.BaseAddress = new Uri("https://localhost:44340/");
             });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            services.AddAuthentication("Identity.Application")
                 .AddCookie();
 
             services.AddScoped<TokenProvider>();
