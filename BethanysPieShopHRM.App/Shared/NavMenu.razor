@@ -29,7 +29,7 @@
                 @*<NavLink class="list-group-item list-group-item-action bg-light" href="Logout">
             <span class="oi oi-list-rich" aria-hidden="true"></span> Log out
         </NavLink>*@
-                <form action="/Logout" method="post">
+                <form action="/identity/account/Logout" method="post">
                     <button class="nav-link btn btn-link" type="submit">
                         <span class="oi oi-list-rich" aria-hidden="true"></span> Log out (@context.User.Identity.Name)
                     </button>
@@ -38,7 +38,7 @@
                 </form>
             </Authorized>
             <NotAuthorized>
-                <NavLink class="list-group-item list-group-item-action bg-light" href="/Login">
+                <NavLink class="list-group-item list-group-item-action bg-light" href="/identity/account/Login">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Log in
                 </NavLink>
             </NotAuthorized>
