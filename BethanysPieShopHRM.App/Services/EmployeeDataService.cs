@@ -1,4 +1,5 @@
 ﻿using BethanysPieShopHRM.Shared;
+using IdentityModel.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +13,22 @@ namespace BethanysPieShopHRM.App.Services
     public class EmployeeDataService: IEmployeeDataService
     {
         private readonly HttpClient _httpClient;
-        private readonly TokenProvider _tokenProvider;
+        private readonly TokenManager _tokenManager;
 
-        public EmployeeDataService(HttpClient httpClient,TokenProvider tokenProvider)
+        public EmployeeDataService(HttpClient httpClient,TokenManager tokenManager)
         {
             _httpClient = httpClient;
-            _tokenProvider = tokenProvider;
+            _tokenManager = tokenManager;
         }
 
         public async Task<IEnumerable<Employee>> GetAllEmployees()
         {
-            _httpClient.DefaultRequestHeaders.Add("Cookie",
-                ".AspNetCore.Cookies=" + _tokenProvider.Cookie);
+            //_httpClient.DefaultRequestHeaders.Add("Cookie",
+            //    ".AspNetCore.Cookies=" + _tokenProvider.AccessToken);
 
+            _httpClient.SetBearerToken(await _tokenManager.RetrieveAccessTokenAsync());
             return await JsonSerializer.DeserializeAsync<IEnumerable<Employee>>
-                (await _httpClient.GetStreamAsync($"api/dummyemployee"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync($"api/employee"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<Employee> GetEmployeeDetails(int employeeId)

@@ -33,8 +33,8 @@ namespace BethanysPieShopHRM.Server
 
             services.AddHttpClient<IEmployeeDataService, EmployeeDataService>(client =>
             {
-                //client.BaseAddress = new Uri("https://localhost:44340/");
-                client.BaseAddress = new Uri("https://localhost:44301/");
+                client.BaseAddress = new Uri("https://localhost:44340/");
+               // client.BaseAddress = new Uri("https://localhost:44301/");
             });
             services.AddHttpClient<ICountryDataService, CountryDataService>(client =>
             {
@@ -65,8 +65,9 @@ namespace BethanysPieShopHRM.Server
                  options.Scope.Add("openid");
                  options.Scope.Add("profile");
                  options.Scope.Add("email");
-                 //options.Scope.Add("bethanyspieshophrapi");
-                 //options.Scope.Add("offline_access");
+                 options.Scope.Add("bethanyspieshophrapi");                
+                 options.Scope.Add("offline_access");                
+                 
                  //options.CallbackPath = ...
                  options.SaveTokens = true;
                  options.GetClaimsFromUserInfoEndpoint = true;
@@ -74,6 +75,7 @@ namespace BethanysPieShopHRM.Server
              });
              
             services.AddScoped<TokenProvider>();
+            services.AddScoped<TokenManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

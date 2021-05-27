@@ -7,12 +7,17 @@ namespace BethanysPieShopHRM.App.Services
     public class TokenProvider
     {
         public string XsrfToken { get; set; }
-        public string Cookie { get; set; }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTimeOffset ExpiresAt { get; set; }
+
     }
 
     public class InitailApplicationState
     {
         public string XsrfToken { get; set; }
-        public string Cookie { get; set; }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTimeOffset ExpiresAt { get; set; }
     }
 }

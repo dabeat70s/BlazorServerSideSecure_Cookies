@@ -1,5 +1,8 @@
 ﻿@page "/"
 @using BethanysPieShopHRM.App
+@using Microsoft.AspNetCore.Authentication
+@using System.Globalization
+
 @namespace BethanysPieShopHRM.Server.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
@@ -15,10 +18,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BethanysPieShopHRM.Server</title>
     <base href="~/" />
-    
+
     <link href="_content/BethanysPieShopHRM.App/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="_content/BethanysPieShopHRM.App/css/app.css" rel="stylesheet" />
-    
+
     <script src="https://kit.fontawesome.com/273d0585ea.js" crossorigin="anonymous"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
@@ -32,13 +35,26 @@
         var initialTokenState = new BethanysPieShopHRM.App.Services.InitailApplicationState
         {
             XsrfToken = Xsrf.GetAndStoreTokens(HttpContext).RequestToken,
-            Cookie = HttpContext.Request.Cookies[".AspNetCore.Cookies"]
-        };
+            AccessToken = await HttpContext.GetTokenAsync("access_token"),
+            RefreshToken = await HttpContext.GetTokenAsync("refresh_token")
 
+        };
+        var expiresAt = await HttpContext.GetTokenAsync("expires_at");
+        if (DateTimeOffset.TryParse(expiresAt,
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.None,
+            out var expiration))
+        {
+            initialTokenState.ExpiresAt = expiration;
+        }
+        else
+        {
+            initialTokenState.ExpiresAt = DateTimeOffset.UtcNow;
+        }
     }
     <app>
         <component type="typeof(App)" render-mode="ServerPrerendered"
-                   param-InitialState="initialTokenState"/>
+                   param-InitialState="initialTokenState" />
     </app>
 
     <div id="blazor-error-ui">
